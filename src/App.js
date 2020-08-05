@@ -1,24 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
+
+  const [todos, setTodos] = useState(['Take dogs out for a walk.', 'Take the trash out.', 'Finish the firebase todos app.'])
+  const [input, setInput] = useState('')
+
+  const addTodo = (event) => {
+    // To avoid refreshing the page
+    event.preventDefault()
+    // Append to array using spread(...)
+    setTodos([...todos, input])
+    setInput('')
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Hello!</h1>
+      <form>
+        <input value={input} onChange={event => setInput(event.target.value)} />
+        <button type="submit" onClick={addTodo}>Add Todo</button>
+      </form>
+      <ul>
+        {todos.map((todo, index) => (
+          <li key={index}>{todo}</li>
+        ))}
+      </ul>
     </div>
   );
 }
