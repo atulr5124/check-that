@@ -14,7 +14,10 @@ function App() {
   useEffect(() => {
     // this code runs when the app/componet loads
     db.collection('todos').orderBy('timestamp','desc').onSnapshot(snapshot => {
-      setTodos(snapshot.docs.map(doc => doc.data().todoTitle))
+      setTodos(snapshot.docs.map(doc => ({
+        id: doc.id,
+        todoTitle: doc.data().todoTitle
+      })))
     })
   }, [])
 
@@ -33,7 +36,7 @@ function App() {
   return (
     <div className="App">
       <h1>Hello!</h1>
-      
+
       <form>
         <FormControl>
           <InputLabel><span role="img">✅</span> New Todo</InputLabel>
@@ -42,8 +45,8 @@ function App() {
         <Button variant="contained" color="primary" type="submit" onClick={addTodo} disabled={!input}>Add Todo</Button>
       </form>
       <ul>
-        {todos.map((todo, index) => (
-          <Todo key={index} todo={todo} />
+        {todos.map((todo) => (
+          <Todo key={todo.id} todo={todo} />
         ))}
       </ul>
     </div>
