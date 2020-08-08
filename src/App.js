@@ -35,7 +35,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Hello!</h1>
+      <h1>CheckThat✔️</h1>
 
       <form>
         <FormControl>
