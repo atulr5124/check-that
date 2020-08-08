@@ -1,3 +1,11 @@
 .todo__list {
     text-align: center;
 }
+
+.list__item__actions {
+    float: right
+}
+
+.update__input__field {
+    width: 100%;
+}

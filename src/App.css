@@ -36,3 +36,38 @@
     transform: rotate(360deg);
   }
 }
+
+.todo__form {
+  padding: 0px 100px 0px 100px;
+}
+
+button {
+  margin-top: 20px;
+}
+
+.container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.todo__form__jt {
+  flex-basis: 70%;
+}
+
+.doer__header__jt {
+  flex-basis: 20%;
+} 
+
+.form-actions {
+  margin: 0;
+  background-color: transparent;
+  text-align: center;
+}
+
+.form-actions button {
+  width: 30%;
+}
+
+.list__of__todos {
+  width: 100%;
+}

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Button, FormControl, InputLabel, Input } from '@material-ui/core'
 import './App.css'
 import Todo from './Todo'
 import db from './firebase'
 import firbase from 'firebase'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Jumbotron, Form, Container, Button, Row, Col, ListGroup } from 'react-bootstrap';
 
 function App() {
 
@@ -13,7 +14,7 @@ function App() {
   // When the app loads, fetch todos from the database as they get refreshed
   useEffect(() => {
     // this code runs when the app/componet loads
-    db.collection('todos').orderBy('timestamp','desc').onSnapshot(snapshot => {
+    db.collection('todos').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
       setTodos(snapshot.docs.map(doc => ({
         id: doc.id,
         todoTitle: doc.data().todoTitle
@@ -34,21 +35,36 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <h1>CheckThat✔️</h1>
+    <div>
+      <Jumbotron>
+        <Container fluid="md">
+          <Row>
+            <Col md={3} sm={12}><h1 className="doer__header__jt">DOER</h1></Col>
+            <Col md={9} sm={12} xl="6">
+              <Form className="todo__form__jt">
+                <Form.Group controlId="formBasicTask">
+                  <Form.Control type="text" placeholder="Add a new task here..."
+                    value={input} onChange={event => setInput(event.target.value)} />
+                </Form.Group>
+                <div className="form-actions">
+                  <Button onClick={addTodo} disabled={!input} variant="primary" type="submit">
+                    ADD
+                  </Button>
+                </div>
 
-      <form>
-        <FormControl>
-          <InputLabel><span role="img">✅</span> New Todo</InputLabel>
-          <Input value={input} onChange={event => setInput(event.target.value)} />
-        </FormControl>
-        <Button variant="contained" color="primary" type="submit" onClick={addTodo} disabled={!input}>Add Todo</Button>
-      </form>
-      <ul>
-        {todos.map((todo) => (
-          <Todo key={todo.id} todo={todo} />
-        ))}
-      </ul>
+              </Form>
+            </Col>
+          </Row>
+        </Container>
+      </Jumbotron>
+
+      <Container>
+        <ListGroup className="list__of__todos" variant="flush">
+          {todos.map((todo) => (
+            <Todo key={todo.id} todo={todo} />
+          ))}
+        </ListGroup>
+      </Container>
     </div>
   );
 }

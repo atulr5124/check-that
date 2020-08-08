@@ -1,51 +1,50 @@
 import React, { useState } from 'react'
 import './Todo.css'
-import { DeleteForever } from '@material-ui/icons'
-import { List, ListItem, ListItemText, ListItemAvatar, Avatar, Button, Modal, makeStyles } from '@material-ui/core'
 import db from './firebase'
+import { ListGroup, ButtonGroup, Button, Modal } from 'react-bootstrap'
+import { Pencil, Trash } from 'react-bootstrap-icons'
 
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        position: "absolute",
-        width: '400',
-        backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2,4,3)
-    }
-}))
+function Todo({ todo }) {
 
-function Todo({todo}) {
-
-    const classes = useStyles()
-    const [open, setOpen] = useState(false)
+    const [show, setShow] = useState(false)
     const [input, setInput] = useState('')
 
     const updateTodo = () => {
         db.collection('todos').doc(todo.id).set({
             todoTitle: input
         }, { merge: true })
-        setOpen(false)
+        setShow(false)
     }
+
+    const handleClose = () => setShow(false)
+    const handleShow = () => setShow(true)
 
     return (
         <>
-        <Modal open={open} onClose={e => setOpen(false)}>
-            <div className={classes.paper}>
-                <h1>I am a Modal</h1>
-                <input placeholder={todo.todoTitle} value={input} onChange={event => setInput(event.target.value)} />
-                <Button onClick={updateTodo}>Update</Button>
-            </div>
-        </Modal>
-        <List>
-            <ListItem className="todo__list">
-                <ListItemAvatar>
-                </ListItemAvatar>
-                <ListItemText primary={todo.todoTitle} secondary="Dummy deadline ⏰" />
-            </ListItem>
-            <button onClick={e => setOpen(true)}>Edit</button>
-            <DeleteForever onClick={event => db.collection('todos').doc(todo.id).delete()} />
-        </List>
+            <Modal show={show} onHide={handleClose} >
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Todo <Pencil size={20} color="royalblue" /></Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <input className="update__input__field" placeholder={todo.todoTitle} value={input} onChange={event => setInput(event.target.value)} />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={updateTodo}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <ListGroup.Item>
+                {todo.todoTitle}
+                <ButtonGroup aria-label="Task Actions" className="list__item__actions">
+                    <Button variant="primary">
+                        <Pencil size={20} onClick={handleShow} />
+                    </Button>
+                    <Button variant="danger" onClick={event => db.collection('todos').doc(todo.id).delete()}>
+                        <Trash size={20} />
+                    </Button>
+                </ButtonGroup>
+            </ListGroup.Item>
         </>
     )
 }
